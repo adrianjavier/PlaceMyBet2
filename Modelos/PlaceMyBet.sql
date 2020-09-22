@@ -1,77 +1,61 @@
-CREATE DATABASE if NOT EXISTS `PlaceMyBet` DEFAULT CHARACTER SET UTF8; 
+CREATE SCHEMA IF NOT EXISTS `PlaceMyBet` DEFAULT CHARACTER SET utf8 ;
+USE `PlaceMyBet` ;
 
-USE `PlaceMyBet`;
+CREATE TABLE IF NOT EXISTS `PlaceMyBet`.`Evento` (
+  `idEvento` INT NOT NULL,
+  `local` VARCHAR(45) NOT NULL,
+  `visitante` VARCHAR(45) NOT NULL,
+  `fecha` DATE NOT NULL,
+  PRIMARY KEY (`idEvento`));
 
-CREATE TABLE if NOT EXISTS `Evento`
-(`idEvento` INT NOT NULL,
-`local` VARCHAR(45) NOT NULL,
-`visitante` VARCHAR(45) NOT NULL,
-`fecha` DATE NOT NULL,
-PRIMARY KEY (`idEvento`));
+CREATE TABLE IF NOT EXISTS `PlaceMyBet`.`Mercado` (
+  `idMercado` INT NOT NULL,
+  `cuotaOver` DECIMAL(10) NOT NULL,
+  `cuotaUnder` DECIMAL(10) NOT NULL,
+  `dineroOver` DECIMAL(10) NOT NULL,
+  `dineroUnder` DECIMAL(10) NOT NULL,
+  `tipoMercado` INT NOT NULL,
+  `idEvento` INT NOT NULL,
+  PRIMARY KEY (`idMercado`),
+  CONSTRAINT `relacionEvento` FOREIGN KEY (`idEvento`) REFERENCES `PlaceMyBet`.`Evento` (`idEvento`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
-CREATE TABLE if NOT EXISTS `Mercado 1.5`
-(`idEvento` INT NOT NULL,
-`cuotaOver` DECIMAL(5,2) NOT NULL,
-`cuotaUnder` DECIMAL(5,2) NOT NULL,
-`dineroOver` DECIMAL(5,2) NOT NULL,
-`dineroUnder` DECIMAL(5,2) NOT NULL,
-PRIMARY KEY (`idEvento`),
-CONSTRAINT `relacionEvento1.5` FOREIGN KEY (`idEvento`) REFERENCES `evento` (`idEvento`));
+CREATE TABLE IF NOT EXISTS `PlaceMyBet`.`Usuario` (
+  `gmail` VARCHAR(50) NOT NULL,
+  `nombre` VARCHAR(45) NOT NULL,
+  `apellido` VARCHAR(45) NOT NULL,
+  `edad` INT NOT NULL,
+  PRIMARY KEY (`gmail`));
 
-CREATE TABLE if NOT EXISTS `Mercado 2.5`
-(`idEvento` INT NOT NULL,
-`cuotaOver` DECIMAL(5,2) NOT NULL,
-`cuotaUnder` DECIMAL(5,2) NOT NULL,
-`dineroOver` DECIMAL(5,2) NOT NULL,
-`dineroUnder` DECIMAL(5,2) NOT NULL,
-PRIMARY KEY (`idEvento`),
-CONSTRAINT `relacionEvento2.5` FOREIGN KEY (`idEvento`) REFERENCES `evento` (`idEvento`));
+CREATE TABLE IF NOT EXISTS `PlaceMyBet`.`Apuesta` (
+  `idApuesta` INT NOT NULL,
+  `tipoMercado` INT NOT NULL,
+  `cuota` DECIMAL(10) NOT NULL,
+  `dinero` DECIMAL(10) NOT NULL,
+  `fecha` DATE NOT NULL,
+  `idMercado` INT NOT NULL,
+  `gmail` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`idApuesta`),
+  CONSTRAINT `relacionUsuario` FOREIGN KEY (`gmail`) REFERENCES `PlaceMyBet`.`Usuario` (`gmail`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `relacionMercado` FOREIGN KEY (`idMercado`) REFERENCES `PlaceMyBet`.`Mercado` (`idMercado`) ON DELETE NO ACTION ON UPDATE NO ACTION);
 
-CREATE TABLE if NOT EXISTS `Mercado 3.5`
-(`idEvento` INT NOT NULL,
-`cuotaOver` DECIMAL(5,2) NOT NULL,
-`cuotaUnder` DECIMAL(5,2) NOT NULL,
-`dineroOver` DECIMAL(5,2) NOT NULL,
-`dineroUnder` DECIMAL(5,2) NOT NULL,
-PRIMARY KEY (`idEvento`),
-CONSTRAINT `relacionEvento3.5` FOREIGN KEY (`idEvento`) REFERENCES `evento` (`idEvento`));
-
-CREATE TABLE if NOT EXISTS `Cuenta Bancaria`
-(`numCuenta` VARCHAR(45) NOT NULL,
-`saldo`DECIMAL(10,2) NOT NULL,
-`nombreBanco` VARCHAR (45) NOT NULL,
-`numTarjeta` INT NOT NULL,
-PRIMARY KEY (`numCuenta`));
-
-CREATE TABLE if NOT EXISTS `Usuario`
-(`gmail` VARCHAR(50) NOT NULL,
-`nombre` VARCHAR(45) NOT NULL,
-`apellido`VARCHAR(45) NOT NULL,
-`edad` INT NOT NULL,
-`numCuenta` VARCHAR(45),
-PRIMARY KEY(`gmail`),
-CONSTRAINT `relacionCuenta` FOREIGN KEY (`numCuenta`) REFERENCES `Cuenta Bancaria` (`numCuenta`)
-);
-
-CREATE TABLE if NOT EXISTS `Apuesta`
-(`idApuesta` INT NOT NULL,
-`idEvento` INT NOT NULL,
-`tipoMercado` VARCHAR(45) NOT NULL,
-`cuota` DECIMAL(5,2) NOT NULL,
-`dinero` DECIMAL(10,2) NOT NULL,
-`fecha` DATE NOT NULL,
-`gmail`VARCHAR(50) NOT NULL,
-PRIMARY KEY (`idApuesta`),
-CONSTRAINT `relacionUsuario` FOREIGN KEY (`gmail`) REFERENCES `Usuario` (`gmail`),
-CONSTRAINT `relacionEvento` FOREIGN KEY (`idEvento`) REFERENCES `Evento` (`idEvento`)
-);
+CREATE TABLE IF NOT EXISTS `PlaceMyBet`.`Cuenta Bancaria` (
+  `gmail` VARCHAR(50) NOT NULL,
+  `saldo` DECIMAL(10) NOT NULL,
+  `nombreBanco` VARCHAR(45) NOT NULL,
+  `numTarjeta` INT NOT NULL,
+  PRIMARY KEY (`gmail`),
+  CONSTRAINT `relacionUsuario2` FOREIGN KEY (`gmail`) REFERENCES `PlaceMyBet`.`Usuario` (`gmail`) ON DELETE NO ACTION ON UPDATE NO ACTION);
 
 
-INSERT INTO `Usuario` (gmail, nombre, apellido, edad) VALUES ('adbaro@gmail.com','Adrian','Ballesteros', 20);
-INSERT INTO `Evento` VALUES (1,'Valencia','Espanyol', '2020-09-20');
-INSERT INTO `Mercado 1.5` VALUES (1,1.45,2.85,100,50);
-INSERT INTO `Mercado 2.5` VALUES (1,1.9,1.9,100,100);
-INSERT INTO `Mercado 3.5` VALUES (1,2.85,2.43,50,100);
-INSERT INTO `Cuenta Bancaria` VALUES ('123456789', 500.25, 'Bankia', 123456789);
-UPDATE `Usuario` SET `numCuenta` = '123456789' WHERE `gmail` = 'adbaro@gmail.com';
-INSERT INTO `Apuesta` VALUES (1,1,'1.5', 1.2, 30.3, '2020-09-19', 'adbaro@gmail.com'); 
+INSERT INTO `PlaceMyBet`.`Evento` (`idEvento`, `local`, `visitante`, `fecha`) VALUES (1, 'Valencia', 'Espanyol', '2020-09-20');
+INSERT INTO `PlaceMyBet`.`Evento` (`idEvento`, `local`, `visitante`, `fecha`) VALUES (2, 'Barcelona', 'Madrid', '2020-09-19');
+INSERT INTO `PlaceMyBet`.`Mercado` (`idMercado`, `cuotaOver`, `cuotaUnder`, `dineroOver`, `dineroUnder`, `tipoMercado`, `idEvento`) VALUES (1, 1.45, 2.85, 50, 100, 1, 1);
+INSERT INTO `PlaceMyBet`.`Mercado` (`idMercado`, `cuotaOver`, `cuotaUnder`, `dineroOver`, `dineroUnder`, `tipoMercado`, `idEvento`) VALUES (2, 2.8, 1.2, 100, 50, 0, 1);
+INSERT INTO `PlaceMyBet`.`Mercado` (`idMercado`, `cuotaOver`, `cuotaUnder`, `dineroOver`, `dineroUnder`, `tipoMercado`, `idEvento`) VALUES (3, 2.78, 1.5, 100, 100, 1, 2);
+INSERT INTO `PlaceMyBet`.`Usuario` (`gmail`, `nombre`, `apellido`, `edad`) VALUES ('adbaro@gmail.com', 'Adrian', 'Ballesteros', 20);
+INSERT INTO `PlaceMyBet`.`Usuario` (`gmail`, `nombre`, `apellido`, `edad`) VALUES ('sami@gmail.com', 'Sami', 'Martinez', 23);
+INSERT INTO `PlaceMyBet`.`Apuesta` (`idApuesta`, `tipoMercado`, `cuota`, `dinero`, `fecha`, `idMercado`, `gmail`) VALUES (1, 1, 1.89, 100, '2020-09-18', 1, 'adbaro@gmail.com');
+INSERT INTO `PlaceMyBet`.`Apuesta` (`idApuesta`, `tipoMercado`, `cuota`, `dinero`, `fecha`, `idMercado`, `gmail`) VALUES (2, 0, 1.3, 200, '2020-09-18', 3, 'sami@gmail.com');
+INSERT INTO `PlaceMyBet`.`Cuenta Bancaria` (`gmail`, `saldo`, `nombreBanco`, `numTarjeta`) VALUES ('adbaro@gmail.com', 500, 'Bankia', 123456789);
+INSERT INTO `PlaceMyBet`.`Cuenta Bancaria` (`gmail`, `saldo`, `nombreBanco`, `numTarjeta`) VALUES ('sami@gmail.com', 900, 'Santander', 987654321);
