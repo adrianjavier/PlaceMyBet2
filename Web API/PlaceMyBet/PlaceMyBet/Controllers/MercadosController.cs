@@ -8,17 +8,27 @@ using System.Web.Http;
 
 namespace PlaceMyBet.Controllers
 {
+    [Route("api/Mercados/{action}")]
     public class MercadosController : ApiController
     {
-        // GET: api/Mercados
+        [HttpGet]
+        [ActionName("Get")]
         public IEnumerable<Mercado> Get()
         {
             MercadosRepository rep = new MercadosRepository();
             List<Mercado> lista = rep.Retrieve();
             return lista;
         }
+        [HttpGet]
+        [ActionName("GetDTO")]
+        public IEnumerable<MercadoDTO> GetDTO()
+        {
+            MercadosRepository rep = new MercadosRepository();
+            List<MercadoDTO> lista = rep.RetrieveDTO();
+            return lista;
+        }
 
-        // GET: api/Mercados/5
+
         public string Get(int id)
         {
             return "value";

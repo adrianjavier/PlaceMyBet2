@@ -4,17 +4,28 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.UI;
 using PlaceMyBet.Models;
 
 namespace PlaceMyBet.Controllers
 {
+    [Route("api/Apuestas/{action}")]
     public class ApuestasController : ApiController
     {
-        // GET: api/Apuestas
+        [HttpGet]
+        [ActionName("Get")]
         public IEnumerable<Apuesta> Get()
         {
             ApuestasRepository rep = new ApuestasRepository();
             List<Apuesta> lista = rep.Retrieve();
+            return lista;
+        }
+        [HttpGet]
+        [ActionName("GetDTO")]
+        public IEnumerable<ApuestaDTO> GetDTO()
+        {
+            ApuestasRepository rep = new ApuestasRepository();
+            List<ApuestaDTO> lista = rep.RetrieveDTO();
             return lista;
         }
 
@@ -24,9 +35,10 @@ namespace PlaceMyBet.Controllers
             return "value";
         }
 
-        // POST: api/Apuestas
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Apuesta a)
         {
+            var repo = new ApuestasRepository();
+            repo.Save(a);
         }
 
         // PUT: api/Apuestas/5

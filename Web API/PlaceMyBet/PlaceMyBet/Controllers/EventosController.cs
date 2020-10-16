@@ -8,15 +8,29 @@ using System.Web.Http;
 
 namespace PlaceMyBet.Controllers
 {
+    [Route("api/Eventos/{action}")]
     public class EventosController : ApiController
     {
-        // GET: api/Eventos
+        
+        [HttpGet]
+        [ActionName("Get")]
         public IEnumerable<Evento> Get()
         {
             EventosRepository rep = new EventosRepository();
             List<Evento> lista = rep.Retrieve();
             return lista;
         }
+
+        [HttpGet]
+        [ActionName("GetDTO")]
+        public IEnumerable<EventoDTO> GetDTO()
+        {
+            EventosRepository rep = new EventosRepository();
+            List<EventoDTO> lista = rep.RetrieveDTO();
+            return lista;
+        }
+
+
 
         // GET: api/Eventos/5
         public string Get(int id)

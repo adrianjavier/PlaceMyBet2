@@ -20,4 +20,18 @@ namespace PlaceMyBet.Models
             this.fecha = fecha;
         }
     }
+
+    public class EventoDTO
+    {
+        public string local { get; set; }
+        public string visitante { get; set; }
+        public string fecha { get; set; }
+
+        public EventoDTO(string local, string visitante, string fecha)
+        {
+            this.local = local;
+            this.visitante = visitante;
+            this.fecha = fecha;
+        }
+    }
 }
