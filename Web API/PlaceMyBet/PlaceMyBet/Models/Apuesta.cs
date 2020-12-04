@@ -52,4 +52,23 @@ namespace PlaceMyBet.Models
             this.tipoCuota = tipoCuota;
         }
     }
+    public class ApuestaDTO2
+    {
+        public string UsuarioId { get; set; }
+        public string tipoCuota { get; set; }
+        public double cuota { get; set; }
+        public double dinero { get; set; }
+        public int EventoId { get; set; }
+        public Mercado Mercado { get; set; }
+
+        public ApuestaDTO2 (string UsuarioId, string tipoCuota, double cuota, double dinero, int EventoId, Mercado Mercado)
+        {
+            this.UsuarioId = UsuarioId;
+            this.tipoCuota = tipoCuota;
+            this.cuota = cuota;
+            this.dinero = dinero;
+            this.EventoId = EventoId;
+            this.Mercado = Mercado;
+        }
+    }
 }

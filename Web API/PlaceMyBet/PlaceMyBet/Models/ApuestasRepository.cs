@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,11 +47,12 @@ namespace PlaceMyBet.Models
             using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
                 apuestas = context.Apuestas.ToList();
+                apuestas = context.Apuestas.Include(p => p.Mercado).ToList();
             }
             return apuestas;
         }
 
-        internal List<ApuestaDTO> RetrieveDTO()
+        internal List<ApuestaDTO2> RetrieveDTO()
         {
             //MySqlConnection con = Connect();
             //MySqlCommand command = con.CreateCommand();
@@ -77,7 +79,18 @@ namespace PlaceMyBet.Models
             //    Debug.WriteLine("Se ha producido un error de conexion");
             //    return null;
             //}
-            return null;
+            List<Apuesta> apuestas = new List<Apuesta>();
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                apuestas = context.Apuestas.ToList();
+                apuestas = context.Apuestas.Include(p => p.Mercado).ToList();
+            }
+            List<ApuestaDTO2> apuestas2 = new List<ApuestaDTO2>();
+            for (int i = 0; i < apuestas.Count; i++)
+            {
+                apuestas2.Add(ToDTO2(apuestas[i]));
+            }
+            return apuestas2;
         }
 
         internal void Save(Apuesta a) 
@@ -163,6 +176,38 @@ namespace PlaceMyBet.Models
 
             context.Apuestas.Add(a);
             context.SaveChanges();
+
+            Mercado m;
+            using (context)
+            {
+                m = context.Mercados.Single(b => b.MercadoId == a.MercadoId);
+                if(a.tipoCuota == "under")
+                {
+                    m.DineroUnder = m.DineroUnder + a.dinero;
+                }
+                else
+                {
+                    m.DineroOver = m.DineroOver + a.dinero;
+                }
+
+                m.CuotaOver = m.DineroOver / (m.DineroOver + m.DineroUnder);
+                m.CuotaOver = Math.Round((1/m.CuotaOver)*0.95,2);
+                m.CuotaUnder = m.DineroUnder / (m.DineroUnder + m.DineroOver);
+                m.CuotaUnder = Math.Round((1 / m.CuotaUnder) * 0.95,2);
+                context.SaveChanges();
+            }
+
+        }
+        static public ApuestaDTO2 ToDTO2(Apuesta a)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            Mercado m;
+            using (context)
+            {
+                m= context.Mercados.Single(b => b.MercadoId == a.MercadoId);
+                
+            }
+                return new ApuestaDTO2(a.UsuarioId, a.tipoCuota, a.cuota, a.dinero, m.EventoId, a.Mercado);
         }
     }
 }

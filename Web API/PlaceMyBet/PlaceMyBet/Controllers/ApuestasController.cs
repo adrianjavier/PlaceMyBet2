@@ -22,10 +22,10 @@ namespace PlaceMyBet.Controllers
         }
         [HttpGet]
         [ActionName("GetDTO")]
-        public IEnumerable<ApuestaDTO> GetDTO()
+        public IEnumerable<ApuestaDTO2> GetDTO()
         {
             ApuestasRepository rep = new ApuestasRepository();
-            List<ApuestaDTO> lista = rep.RetrieveDTO();
+            List<ApuestaDTO2> lista = rep.RetrieveDTO();
             return lista;
         }
 

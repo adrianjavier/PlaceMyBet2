@@ -23,10 +23,10 @@ namespace PlaceMyBet.Controllers
 
         [HttpGet]
         [ActionName("GetDTO")]
-        public IEnumerable<EventoDTO> GetDTO()
+        public IEnumerable<EventoDTO2> GetDTO()
         {
             EventosRepository rep = new EventosRepository();
-            List<EventoDTO> lista = rep.RetrieveDTO();
+            List<EventoDTO2> lista = rep.RetrieveDTO();
             return lista;
         }
 
@@ -44,13 +44,17 @@ namespace PlaceMyBet.Controllers
         }
 
         // PUT: api/Eventos/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, string local, string visitante)
         {
+            EventosRepository rep = new EventosRepository();
+            rep.Put(id, local, visitante);
         }
 
         // DELETE: api/Eventos/5
         public void Delete(int id)
         {
+            EventosRepository rep = new EventosRepository();
+            rep.Delete(id);
         }
     }
 }

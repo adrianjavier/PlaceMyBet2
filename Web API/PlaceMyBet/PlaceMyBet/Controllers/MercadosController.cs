@@ -21,10 +21,10 @@ namespace PlaceMyBet.Controllers
         }
         [HttpGet]
         [ActionName("GetDTO")]
-        public IEnumerable<MercadoDTO> GetDTO()
+        public IEnumerable<MercadoDTO2> GetDTO()
         {
             MercadosRepository rep = new MercadosRepository();
-            List<MercadoDTO> lista = rep.RetrieveDTO();
+            List<MercadoDTO2> lista = rep.RetrieveDTO();
             return lista;
         }
 
@@ -35,8 +35,10 @@ namespace PlaceMyBet.Controllers
         }
 
         // POST: api/Mercados
-        public void Post([FromBody]string value)
+        public void Post([FromBody] Mercado m)
         {
+            var repo = new MercadosRepository();
+            repo.Save(m);
         }
 
         // PUT: api/Mercados/5

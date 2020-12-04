@@ -48,9 +48,10 @@ namespace PlaceMyBet.Models
                 eventos = context.Eventos.ToList();
             }
             return eventos;
+            
         }
 
-        internal List<EventoDTO> RetrieveDTO()
+        internal List<EventoDTO2> RetrieveDTO()
         {
             //MySqlConnection con = Connect();
             //MySqlCommand command = con.CreateCommand();
@@ -77,7 +78,43 @@ namespace PlaceMyBet.Models
             //    Debug.WriteLine("Se ha producido un error de conexion");
             //    return null;
             //}
-            return null;
+            List<EventoDTO2> eventos = new List<EventoDTO2>();
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                eventos = context.Eventos.Select(p => ToDTO2(p)).ToList();
+            }
+            return eventos;
+        }
+
+        internal void Put(int id, string local, string visitante)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            Evento e;
+            using (context)
+            {
+                e = context.Eventos.Single(b => b.EventoId == id);
+                e.Local = local;
+                e.Visitante = visitante;
+                context.SaveChanges();
+            }
+            
+        }
+
+        internal void Delete(int id)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            Evento e;
+            using (context)
+            {
+                e = context.Eventos.Single(b => b.EventoId == id);
+                context.Eventos.Remove(e);
+                context.SaveChanges();
+            }
+        }
+        static public EventoDTO2 ToDTO2(Evento e)
+        {
+            return new EventoDTO2(e.Local, e.Visitante);
+
         }
     }
 }

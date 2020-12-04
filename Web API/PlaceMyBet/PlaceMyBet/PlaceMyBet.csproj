@@ -282,9 +282,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20201112171521_m1.cs" />
-    <Compile Include="Migrations\20201112171521_m1.designer.cs">
-      <DependentUpon>20201112171521_m1.cs</DependentUpon>
+    <Compile Include="Migrations\20201204172003_m1.cs" />
+    <Compile Include="Migrations\20201204172003_m1.designer.cs">
+      <DependentUpon>20201204172003_m1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\PlaceMyBetContextModelSnapshot.cs" />
     <Compile Include="Models\Apuesta.cs" />

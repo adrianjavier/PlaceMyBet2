@@ -8,7 +8,7 @@ using PlaceMyBet.Models;
 namespace PlaceMyBet.Migrations
 {
     [DbContext(typeof(PlaceMyBetContext))]
-    [Migration("20201112171521_m1")]
+    [Migration("20201204172003_m1")]
     partial class m1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

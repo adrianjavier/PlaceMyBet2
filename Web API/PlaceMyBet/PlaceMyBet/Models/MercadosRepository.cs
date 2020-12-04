@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,11 +47,12 @@ namespace PlaceMyBet.Models
             using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
                 mercados = context.Mercados.ToList();
+                mercados = context.Mercados.Include(p => p.Evento).ToList();
             }
             return mercados;
         }
 
-        internal List<MercadoDTO> RetrieveDTO()
+        internal List<MercadoDTO2> RetrieveDTO()
         {
             //MySqlConnection con = Connect();
             //MySqlCommand command = con.CreateCommand();
@@ -77,7 +79,26 @@ namespace PlaceMyBet.Models
             //    Debug.WriteLine("Se ha producido un error de conexion");
             //    return null;
             //}
-            return null;
+            List<MercadoDTO2> mercados = new List<MercadoDTO2>();
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                mercados = context.Mercados.Select(p => ToDTO2(p)).ToList();
+            }
+            return mercados;
+        }
+
+        internal void Save (Mercado m)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+
+            context.Mercados.Add(m);
+            context.SaveChanges();
+        }
+        static public MercadoDTO2 ToDTO2(Mercado m)
+        {
+            return new MercadoDTO2(m.TipoMercado, m.CuotaOver, m.CuotaUnder);
+
         }
     }
+
 }
