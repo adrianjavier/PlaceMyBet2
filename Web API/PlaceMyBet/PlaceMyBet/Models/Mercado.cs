@@ -62,5 +62,6 @@ namespace PlaceMyBet.Models
             this.cuotaOver = cuotaOver;
             this.cuotaUnder = cuotaUnder;
         }
+
     }
 }

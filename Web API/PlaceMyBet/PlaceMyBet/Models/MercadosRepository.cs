@@ -87,14 +87,20 @@ namespace PlaceMyBet.Models
             return mercados;
         }
 
-        internal Mercado RetrievebyId(int id)
+        //Nuevo examen
+        internal List<ApuestaDTO3> RetrievebyId(int id)
         {
-            Mercado m;
-            using (var context = new PlaceMyBetContext())
+            List<Apuesta> lista;
+            List<ApuestaDTO3> final = new List<ApuestaDTO3>();
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
-                m = context.Mercados.Single(b => b.MercadoId == id);
+                lista = context.Apuestas.Where(a => a.MercadoId == id).ToList();
             }
-            return m;
+            for(int i = 0; i < lista.Count; i++)
+            {
+                final.Add(toDTO3(lista[i]));
+            }
+            return final;
         }
 
         internal void Save (Mercado m)
@@ -108,6 +114,19 @@ namespace PlaceMyBet.Models
         {
             return new MercadoDTO2(m.TipoMercado, m.CuotaOver, m.CuotaUnder);
 
+        }
+
+        //Nuevo examen
+        static public ApuestaDTO3 toDTO3(Apuesta a)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            Usuario u;
+            using (context)
+            {
+                u = context.Usuarios.Single(b => b.UsuarioId == a.UsuarioId);
+
+            }
+            return new ApuestaDTO3(a.dinero, a.tipoCuota, u.Nombre);
         }
     }
 

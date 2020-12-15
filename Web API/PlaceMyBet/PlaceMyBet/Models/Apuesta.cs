@@ -71,4 +71,19 @@ namespace PlaceMyBet.Models
             this.Mercado = Mercado;
         }
     }
+
+    //nuevo examen
+    public class ApuestaDTO3
+    {
+        public double dinero { get; set; }
+        public string tipo { get; set; }
+        public string nombre { get; set; }
+
+        public ApuestaDTO3(double dinero, string tipo, string nombre)
+        {
+            this.dinero = dinero;
+            this.tipo = tipo;
+            this.nombre = nombre;
+        }
+    }
 }
