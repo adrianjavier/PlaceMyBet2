@@ -30,9 +30,10 @@ namespace PlaceMyBet.Controllers
         }
 
         // GET: api/Apuestas/5
-        public string Get(int id)
+        public Apuesta Get(int id)
         {
-            return "value";
+            ApuestasRepository rep = new ApuestasRepository();
+            return rep.RetrievebyId(id);
         }
 
         public void Post([FromBody]Apuesta a)

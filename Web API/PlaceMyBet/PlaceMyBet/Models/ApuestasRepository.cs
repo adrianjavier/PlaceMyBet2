@@ -198,6 +198,16 @@ namespace PlaceMyBet.Models
             }
 
         }
+
+        internal Apuesta RetrievebyId(int id)
+        {
+            Apuesta a;
+            using (var context = new PlaceMyBetContext())
+            {
+                a = context.Apuestas.Single(b => b.ApuestaId == id);
+            }
+            return a;
+        }
         static public ApuestaDTO2 ToDTO2(Apuesta a)
         {
             PlaceMyBetContext context = new PlaceMyBetContext();

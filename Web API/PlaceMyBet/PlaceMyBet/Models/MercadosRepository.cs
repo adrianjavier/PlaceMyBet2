@@ -87,6 +87,16 @@ namespace PlaceMyBet.Models
             return mercados;
         }
 
+        internal Mercado RetrievebyId(int id)
+        {
+            Mercado m;
+            using (var context = new PlaceMyBetContext())
+            {
+                m = context.Mercados.Single(b => b.MercadoId == id);
+            }
+            return m;
+        }
+
         internal void Save (Mercado m)
         {
             PlaceMyBetContext context = new PlaceMyBetContext();
