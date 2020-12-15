@@ -86,4 +86,20 @@ namespace PlaceMyBet.Models
             this.nombre = nombre;
         }
     }
+
+    //Nuevo examen
+
+    public class ApuestaDTO4
+    {
+        public string tipo { get; set; }
+        public string local { get; set; }
+        public string visitante { get; set; }
+
+        public ApuestaDTO4(string tipo, string local, string visitante)
+        {
+            this.tipo = tipo;
+            this.local = local;
+            this.visitante = visitante;
+        }
+    }
 }

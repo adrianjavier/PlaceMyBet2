@@ -9,7 +9,7 @@ using PlaceMyBet.Models;
 
 namespace PlaceMyBet.Controllers
 {
-    [Route("api/Apuestas/{action}")]
+    [Route("api/Apuestas")]
     public class ApuestasController : ApiController
     {
         [HttpGet]
@@ -20,8 +20,7 @@ namespace PlaceMyBet.Controllers
             List<Apuesta> lista = rep.Retrieve();
             return lista;
         }
-        [HttpGet]
-        [ActionName("GetDTO")]
+        [Route("api/Apuestas/GetDTO")]
         public IEnumerable<ApuestaDTO2> GetDTO()
         {
             ApuestasRepository rep = new ApuestasRepository();
@@ -29,11 +28,12 @@ namespace PlaceMyBet.Controllers
             return lista;
         }
 
-        // GET: api/Apuestas/5
-        public Apuesta Get(int id)
+        //Nuevo examen
+        [Route("api/Apuestas")]
+        public List<ApuestaDTO4> Get(int dinero)
         {
             ApuestasRepository rep = new ApuestasRepository();
-            return rep.RetrievebyId(id);
+            return rep.RetrievebyId(dinero);
         }
 
         public void Post([FromBody]Apuesta a)

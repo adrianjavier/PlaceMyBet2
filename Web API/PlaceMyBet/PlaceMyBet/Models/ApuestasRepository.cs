@@ -199,14 +199,19 @@ namespace PlaceMyBet.Models
 
         }
 
-        internal Apuesta RetrievebyId(int id)
+        internal List<ApuestaDTO4> RetrievebyId(int id)
         {
-            Apuesta a;
-            using (var context = new PlaceMyBetContext())
+            List<Apuesta> lista;
+            List<ApuestaDTO4> final = new List<ApuestaDTO4>();
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
-                a = context.Apuestas.Single(b => b.ApuestaId == id);
+                lista = context.Apuestas.Where(a => a.dinero > id).ToList();
             }
-            return a;
+            for(int i = 0; i < lista.Count; i++)
+            {
+                final.Add(toDTO4(lista[i]));
+            }
+            return final;
         }
         static public ApuestaDTO2 ToDTO2(Apuesta a)
         {
@@ -218,6 +223,21 @@ namespace PlaceMyBet.Models
                 
             }
                 return new ApuestaDTO2(a.UsuarioId, a.tipoCuota, a.cuota, a.dinero, m.EventoId, a.Mercado);
+        }
+
+
+        //Nuevo examen
+        static public ApuestaDTO4 toDTO4(Apuesta a)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            Evento e;
+            Mercado m;
+            using (context)
+            {
+                m = context.Mercados.Single(p => p.MercadoId == a.MercadoId);
+                e = context.Eventos.Single(p => p.EventoId == m.EventoId);
+            }
+            return new ApuestaDTO4(a.tipoCuota, e.Local, e.Visitante);
         }
     }
 }
